@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use ReCaptcha\ReCaptcha;
 
 class RegisteredUserController extends Controller
 {
@@ -31,11 +32,21 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $recaptcha = new ReCaptcha(env('RECAPTCHA_SECRET_KEY'));
+
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:'.User::class,
+            'email' => 'required|string|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        $responseRecaptcha = $recaptcha->verify($request->recaptcha_token, $request->ip());
+
+        if (!$responseRecaptcha->isSuccess()) {
+            return back()
+                ->withErrors(['recaptcha' => 'Falha na validação do reCAPTCHA.'])
+                ->withInput();
+        }
 
         $user = User::create([
             'name' => $request->name,

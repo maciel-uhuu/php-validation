@@ -5,14 +5,19 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
         password: '',
+        recaptcha_token: '',
         password_confirmation: '',
     });
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const colorScheme = mediaQuery.matches ? 'dark' : 'light';
 
     useEffect(() => {
         return () => {
@@ -97,6 +102,16 @@ export default function Register() {
                     />
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
+                </div>
+
+                <div className="mt-4 flex flex-col items-end">
+                    <ReCAPTCHA
+                        theme={colorScheme}
+                        sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                        onChange={token => setData('recaptcha_token', token)}
+                    />
+
+                    <InputError message={errors.recaptcha} className="mt-2" />
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
