@@ -8,7 +8,7 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         name: '',
         email: '',
         password: '',
@@ -25,11 +25,16 @@ export default function Register() {
         };
     }, []);
 
-    const submit = (e) => {
+    const submit = e => {
         e.preventDefault();
 
         post(route('register'));
     };
+
+    const handleReCaptcha = token => {
+        clearErrors('recaptcha');
+        setData('recaptcha_token', token);
+    }
 
     return (
         <GuestLayout>
@@ -108,7 +113,7 @@ export default function Register() {
                     <ReCAPTCHA
                         theme={colorScheme}
                         sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-                        onChange={token => setData('recaptcha_token', token)}
+                        onChange={handleReCaptcha}
                     />
 
                     <InputError message={errors.recaptcha} className="mt-2" />
