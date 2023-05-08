@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use ReCaptcha\ReCaptcha;
 
 class UserController extends Controller
 {
@@ -22,7 +28,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('User/Create');
     }
 
     /**
@@ -30,7 +36,30 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:' . User::class,
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        $recaptcha = new ReCaptcha(env('RECAPTCHA_SECRET_KEY'));
+        $responseRecaptcha = $recaptcha->verify($request->recaptcha_token);
+
+        if (!$responseRecaptcha->isSuccess()) {
+            throw ValidationException::withMessages([
+                'recaptcha' => "Falha na validação do reCAPTCHA.",
+            ]);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        event(new Registered($user));
+
+        return redirect(RouteServiceProvider::HOME);
     }
 
     /**

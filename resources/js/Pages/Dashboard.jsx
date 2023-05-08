@@ -19,6 +19,12 @@ export default function Dashboard({ auth, users }) {
 
             <div className="py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="flex justify-end pb-4">
+                        <Link
+                            href={route('user.create')}
+                            className="dark:bg-white px-4 mx-1 py-2 rounded-md font-semibold text-xs uppercase tracking-widest"
+                        >Create New Client</Link>
+                    </div>
                     {users.map(user => (
                         <div key={user.id} className="my-4 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg flex justify-between items-center p-6 text-gray-900 dark:text-gray-100">
                             <div>
