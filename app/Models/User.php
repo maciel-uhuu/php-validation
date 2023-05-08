@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email',
         'active',
         'password',
+        'soccer_team',
     ];
 
     /**

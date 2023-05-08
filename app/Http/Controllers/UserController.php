@@ -26,8 +26,14 @@ class UserController extends Controller
         $users = User::whereNot('id', auth()->id())
             ->when($orderBy, function ($query, $orderBy) use ($direction) {
                 $query->orderBy($orderBy, $direction);
-            })
-            ->paginate(20);
+            });
+
+        if ($request->has('searchBy')) {
+            $users = $users
+                ->where($request->searchBy, 'like', '%' . $request->searchValue . '%');
+        }
+
+        $users = $users->paginate(20);
 
         return Inertia::render('Dashboard', [
             'users' => $users,
