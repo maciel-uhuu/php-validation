@@ -1,10 +1,17 @@
 import { useState } from 'react';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 export default function Dashboard({ auth, users }) {
+    const { url } = usePage();
     const { patch, delete: destroy } = useForm();
     const [showingOrderByDropdown, setShowingOrderByDropdown] = useState(false);
+
+    const urlSplit = url.split('?');
+    const queryString = urlSplit[1];
+    const queryParams = new URLSearchParams(queryString);
+    const orderBy = queryParams.get('orderBy');
+    const direction = queryParams.get('direction');
 
     const handleDelete = user => {
         if (window.confirm('Are you sure you want to delete this customer?')) {
@@ -25,21 +32,21 @@ export default function Dashboard({ auth, users }) {
 
             <div className="py-8">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="flex justify-end pb-4 space-x-4 items-center">
-                        <div className="relative">
+                    <div className="flex justify-between pb-4 space-x-4 items-center">
+                        <div className="relative w-48">
                             <button
                                 onClick={() => setShowingOrderByDropdown(previousState => !previousState)}
-                                className="bg-gray-300 hover:bg-gray-400 py-2 text-xs px-4 rounded focus:outline-none focus:ring focus:border-blue-300">
+                                className="dark:bg-gray-700 dark:hover:bg-gray-800 dark:text-gray-400 py-2 text-xs px-4 rounded focus:outline-none focus:ring focus:border-blue-300">
                                 Order by...
                             </button>
-                            <div className={`py-1 absolute top-full left-0 w-full bg-white border border-gray-300 rounded shadow-lg transition-opacity ${!showingOrderByDropdown ? 'opacity-0 pointer-events-none' : ''}`}>
-                                <Link data={{ orderBy: 'name', direction: 'asc' }}>Name - AZ</Link>
-                                <Link data={{ orderBy: 'name', direction: 'desc' }}>Name - ZA</Link>
-                                <Link data={{ orderBy: 'created_at', direction: 'asc' }}>Created At - Older</Link>
-                                <Link data={{ orderBy: 'created_at', direction: 'desc' }}>Created At - Last</Link>
+                            <div className={`py-1 absolute top-full left-0 w-full dark:bg-gray-700 dark:text-gray-400 px-2 rounded shadow transition-opacity ${!showingOrderByDropdown ? 'opacity-0 pointer-events-none' : ''}`}>
+                                <Link className={`block dark:hover:bg-gray-800 p-1 rounded ${orderBy === 'name' && direction === 'asc' ? 'dark:bg-gray-800 dark:text-gray-400' : ''}`} data={{ orderBy: 'name', direction: 'asc' }}>Name - AZ</Link>
+                                <Link className={`block dark:hover:bg-gray-800 p-1 rounded ${orderBy === 'name' && direction === 'desc' ? 'dark:bg-gray-800 dark:text-gray-400' : ''}`} data={{ orderBy: 'name', direction: 'desc' }}>Name - ZA</Link>
+                                <Link className={`block dark:hover:bg-gray-800 p-1 rounded ${orderBy === 'created_at' && direction === 'asc' ? 'dark:bg-gray-800 dark:text-gray-400' : ''}`} data={{ orderBy: 'created_at', direction: 'asc' }}>Created At - Older</Link>
+                                <Link className={`block dark:hover:bg-gray-800 p-1 rounded ${orderBy === 'created_at' && direction === 'desc' ? 'dark:bg-gray-800 dark:text-gray-400' : ''}`} data={{ orderBy: 'created_at', direction: 'desc' }}>Created At - Last</Link>
                             </div>
                         </div>
-                        <p className="dark:text-white">
+                        <p className="dark:text-gray-400">
                             Showing {users.from} to {users.to} of {users.total}
                         </p>
                         <Link
