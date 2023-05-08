@@ -33,7 +33,7 @@ Route::get('/dashboard', function () {
             return [
                 'id' => $user->id,
                 'name' => $user->name,
-                'email' => $user->email,
+                'active' => $user->active,
                 'created_at' => $user->created_at->diffForHumans(),
             ];
         }),
@@ -42,6 +42,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('user', UserController::class);
+    Route::patch('/user/{user}/active', [UserController::class, 'toggleActive'])->name('user.toggleActive');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

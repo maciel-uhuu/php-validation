@@ -1,13 +1,17 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 export default function Dashboard({ auth, users }) {
-    const { delete: destroy } = useForm();
+    const { patch, delete: destroy } = useForm();
 
     const handleDelete = user => {
         if (window.confirm('Are you sure you want to delete this customer?')) {
             destroy(route('user.destroy', user));
         }
+    };
+
+    const toggleActive = user => {
+        patch(route('user.toggleActive', user));
     };
 
     return (
@@ -31,11 +35,21 @@ export default function Dashboard({ auth, users }) {
                                 <p>{user.name}</p>
                                 <small>at {user.created_at}</small>
                             </div>
-                            <div>
+                            <div className="flex items-center">
                                 <button
-                                    className="dark:bg-red-950 px-4 mx-1 py-2 rounded-md font-semibold text-xs uppercase tracking-widestF"
+                                    type="button"
+                                    className={`relative inline-block w-24 h-8 bg-gray-300 rounded-md p-1 transition-transform ${user.active ? 'bg-green-400' : 'bg-red-950'}`}
+                                    onClick={() => toggleActive(user)}
+                                >
+                                    <span className={`absolute inset-0 h-full w-12 rounded-md bg-gray-100 dark:bg-gray-900 transition-transform transform ${user.active ? 'translate-x-full' : 'translate-x-0'}`}></span>
+                                    <span className="absolute inset-0 flex items-center uppercase justify-center text-xs font-bold text-white">{user.active ? 'Active' : 'Inactive'}</span>
+                                </button>
+
+                                <button
+                                    className="dark:bg-red-950 px-4 mx-1 py-2 rounded-md font-semibold text-xs uppercase tracking-widest"
                                     onClick={() => handleDelete(user)}
                                 >Delete</button>
+
                                 <Link
                                     href={route('user.edit', user)}
                                     className="dark:bg-slate-600 px-4 mx-1 py-2 rounded-md font-semibold text-xs uppercase tracking-widest"

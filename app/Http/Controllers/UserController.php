@@ -105,4 +105,13 @@ class UserController extends Controller
 
         return Redirect::route('dashboard');
     }
+
+    public function toggleActive(User $user)
+    {
+        $user->update([
+            'active' => !$user->active,
+        ]);
+
+        return Redirect::route('dashboard');
+    }
 }
