@@ -18,9 +18,20 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $orderBy = $request->query('orderBy');
+        $direction = $request->query('direction');
+
+        $users = User::whereNot('id', auth()->id())
+            ->when($orderBy, function ($query, $orderBy) use ($direction) {
+                $query->orderBy($orderBy, $direction);
+            })
+            ->paginate(20);
+
+        return Inertia::render('Dashboard', [
+            'users' => $users,
+        ]);
     }
 
     /**
