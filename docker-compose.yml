@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  db:
+    image: mysql
+    container_name: mysql-container
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Master99
+  web:
+    image: "php:8.2-apache"
+    container_name: php-container
+    restart: always
+    volumes:
+      - ./website:/var/www/html
+    ports:
+      - "8888:80"
+    depends_on:
+      - db
