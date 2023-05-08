@@ -12,8 +12,21 @@ services:
     container_name: php-container
     restart: always
     volumes:
-      - ./website:/var/www/html
+      - ./usercontrol:/var/www/html
     ports:
       - "8888:80"
     depends_on:
       - db
+  php:
+    build:
+      context: .
+      dockerfile: php.Dockerfile
+    working_dir: /app
+    restart: always
+    volumes:
+      - ./usercontrol:/app
+    depends_on:
+       - db
+    env_file:
+      - usercontrol/.env.example
+      - usercontrol/.env
