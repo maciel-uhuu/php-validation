@@ -68,7 +68,7 @@ export default function Dashboard({ auth, users }) {
                                 </div>
                                 <input
                                     type="search"
-                                    className="leading-none rounded-r py-1 capitalize"
+                                    className="leading-none rounded-r py-1 capitalize text-xs"
                                     value={searchValue}
                                     ref={searchInputRef}
                                     onChange={handleSearch}
