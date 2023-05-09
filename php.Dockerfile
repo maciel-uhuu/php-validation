@@ -27,6 +27,10 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
 #RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl gmp
+
+RUN docker-php-ext-install mysqli pdo pdo_mysql gd  zip gmp bcmath pcntl ldap sysvmsg exif && docker-php-ext-enable mysqli
+
+#RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
 RUN docker-php-ext-install gd
 

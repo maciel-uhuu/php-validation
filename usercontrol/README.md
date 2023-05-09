@@ -1,5 +1,10 @@
+Instruções para start do projeto 
+    docker-compose up 
+
+
+
 Instalação do projeto com 
-    composer create-project laravel/laravel example-app
+    `composer create-project laravel/laravel example-app`
 
 Criar e configurar arquivo .env
 
@@ -29,3 +34,8 @@ Componentes da Yajra datatables
 Bibliotecas para exportação de dados
     composer require maatwebsite/excel
     composer require barryvdh/laravel-snappy
+
+#Known Isues#
+1 - reCaptcha pode não funcionar dentro de alguns containers locais
+2 - dentro do container WEB executar o comando para coreção das rotas /public /users /register
+`a2enmod rewrite`
