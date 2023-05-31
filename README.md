@@ -30,6 +30,9 @@ npm run dev
 ```
 
 
+Para usar a tabela com ordenação a aplicação tem esse pacote:
+https://github.com/s-damian/larasort
+
 # Teste para à vaga de Desenvolvedor Full Stack
 
 Olá caro desenvolvedor, nesse teste analisaremos seu conhecimento geral e inclusive velocidade de desenvolvimento.

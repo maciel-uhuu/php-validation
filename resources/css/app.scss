@@ -38,7 +38,7 @@ body {
 
 .content {
   margin-inline: auto;
-  width: min(80ch, 100vw - 2%);
+  width: min(80ch, 100vw - 4%);
 }
 
 .app_header {
@@ -53,7 +53,7 @@ body {
 
   nav {
     margin-inline: auto;
-    width: min(80ch, 100vw - 2%);
+    width: min(80ch, 100vw - 4%);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -131,4 +131,49 @@ body {
     font-size: 14px;
     color: rgb(184, 12, 12);
   }
+}
+
+.title {
+  font-size: clamp(20px, 16px + 2vw, 36px);
+  font-weight: 700;
+  color: #000;
+}
+
+table {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+
+  thead {
+    border-bottom: 1px solid #bfb0db;
+  }
+
+  thead,
+  tbody {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  tr {
+    display: grid;
+    grid-template-columns: 60px 1fr 1fr 100px 26px 26px;
+    align-items: center;
+
+    td,
+    th {
+      display: flex;
+    }
+
+    td {
+      flex-direction: column;
+    }
+  }
+}
+
+.client_btn {
+  cursor: pointer;
+  width: 20px;
 }

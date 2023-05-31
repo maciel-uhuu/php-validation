@@ -15,13 +15,14 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $page = $request->query('page') || 1;
-        $users = User::all()->forPage($page, 20);
+        $users = User::whereNotNull('email')
+            ->autosort()
+            ->paginate();
 
         if ($request->wantsJson()) {
             return $users;
         }
-
+        view('clients.index');
         return view('clients.index', ['clients' => $users]);
     }
 
@@ -99,8 +100,8 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Request $request)
     {
-        $user->delete();
+        // $user->delete();
     }
 }
