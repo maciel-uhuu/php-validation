@@ -1,6 +1,35 @@
 # php-validation
 Teste Técnico
 
+## Como executar o sistema
+
+Basta usar o seguinte comando no terminal:
+```
+./vendor/bin/sail up
+```
+Isso faz com que a aplicação Laravel execute num container.
+
+Para executar as migrations basta entrar dentro do container onde se encontra o Laravel e executar:
+```
+php artisan migrate
+```
+
+Caso queira popular o banco rapidamente execute:
+```
+php artisan db:seed
+```
+
+Rode esse comando fora do container para instalar dependências:
+```
+npm i
+```
+
+Para renderizar as Views rode sempre esse comando ao iniciar o projeto:
+```
+npm run dev
+```
+
+
 # Teste para à vaga de Desenvolvedor Full Stack
 
 Olá caro desenvolvedor, nesse teste analisaremos seu conhecimento geral e inclusive velocidade de desenvolvimento.
