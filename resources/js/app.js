@@ -19,16 +19,29 @@ signoutBtn.addEventListener("click", async () => {
 // Clients index page
 const clientTableRows = document.querySelectorAll('.client_table_row');
 
-function editAccountAccess(event) {
-  
+async function editAccountAccess(id, btnElement) {
+  try {
+    await axios.patch(`/api/clients/${id}/change-account-access`, {
+      'can_access_account': btnElement.checked,
+    });
+  } catch (err) {
+    btnElement.checked = !btnElement.checked; // undo change if request fails
+  }
 }
 
 function editClientAccount(event) {
 
 }
 
-async function deleteClient(id) {
-  await axios.delete(`/clients/${id}`)
+async function deleteClient(id, element) {
+  const response = await axios.delete(`/clients/${id}`)
+  
+  if (response.status !== 200) {
+    alert("Falha ao excluir cliente.");
+    return
+  }
+
+  element.remove();
 }
 
 for (const clientRow of clientTableRows) {
@@ -37,30 +50,7 @@ for (const clientRow of clientTableRows) {
   const editClientAccountBtn = clientRow.getElementsByClassName('edit_client_btn')?.[0];
   const deleteClientAccountBtn = clientRow.getElementsByClassName('delete_client_btn')?.[0];
 
-  editAccessBtn.addEventListener('click', () => editAccountAccess(id));
+  editAccessBtn.addEventListener('click', () => editAccountAccess(id, editAccessBtn));
   editClientAccountBtn.addEventListener('click', () => editClientAccount(id));
-  deleteClientAccountBtn.addEventListener('click', () => deleteClient(id));
+  deleteClientAccountBtn.addEventListener('click', () => deleteClient(id, clientRow));
 }
-
-
-// // edit client
-// const listOfEditClientBtn = document.getElementById("edit_client_btn");
-
-// for (const editClientBtn of listOfEditClientBtn) {
-//   editClientBtn.addEventListener("click", async () => {
-//     const clientId = editClientBtn?.dataset['id'];
-//   });
-// }
-
-// // edit client access
-
-
-// // delete client
-// const listOfDeleteClientBtn = document.getElementById("delete_client_btn");
-
-// for (const deleteClientBtn of listOfDeleteClientBtn) {
-//   deleteClientBtn.addEventListener("click", async () => {
-//     const clientId = deleteClientBtn?.dataset['id'];
-//     await axios.delete(`/clients/${clientId}`);
-//   });
-// }

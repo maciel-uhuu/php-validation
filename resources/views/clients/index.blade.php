@@ -24,7 +24,7 @@
         <td>{{ $client->name }}</td>
         <td>{{ $client->email }}</td>
         <td>
-          <input class="edit_client_access" type="checkbox" checked={{$client->can_access_account}} />
+          <input class="edit_client_access" type="checkbox" {{ $client->can_access_account ? 'checked' : '' }} />
         </td>
         <td>
           <a href="/edit"></a>

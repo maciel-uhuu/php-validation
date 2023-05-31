@@ -12,9 +12,7 @@ class SignInRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $user = Auth::user();
-
-        return !$user;
+        return true;
     }
 
     /**

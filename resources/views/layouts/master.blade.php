@@ -2,6 +2,7 @@
 
 <head>
   <title>UHUU - @yield('title', 'Dashboard')</title>
+  <link rel="stylesheet" href="public/vendor/larasort/css/larasort.css">
   @vite(['resources/css/reset.scss', 'resources/css/app.scss', 'resources/js/app.js'])
 </head>
 

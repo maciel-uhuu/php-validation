@@ -25,6 +25,7 @@
 .with-larasort span.larasort-icon-n-2 {
     display: none;
 }
+
 /* ... except at the hover */
 .with-larasort thead th a:hover span.larasort-icon-n-1,
 .with-larasort tfoot td a:hover span.larasort-icon-n-1,
@@ -32,6 +33,7 @@
     display: inline-block;
     transform: rotateZ(-180deg);
 }
+
 /* ... except at the hover */
 .with-larasort thead th a:hover span.larasort-icon-n-2,
 .with-larasort tfoot td a:hover span.larasort-icon-n-2,
@@ -45,6 +47,7 @@
     /*position: relative;*/
     transform: rotateZ(-180deg);
 }
+
 /* ... at the hover, also display it but in the other direction */
 .with-larasort thead th a:hover span.larasort-icon-1,
 .with-larasort tfoot td a:hover span.larasort-icon-1,
@@ -57,6 +60,7 @@
 .with-larasort span.larasort-icon-2 {
     display: inline-block;
 }
+
 /* ... at the hover, also display it but in the other direction */
 .with-larasort thead th a:hover span.larasort-icon-2,
 .with-larasort tfoot td a:hover span.larasort-icon-2,

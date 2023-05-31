@@ -6,7 +6,7 @@ use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\EditClientRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UsersController extends Controller
 {
@@ -87,21 +87,39 @@ class UsersController extends Controller
             }
         }
 
-        $user::query()->create([
+        $user->update([
             'name' => $request->input('name'),
             'email' => $email,
             'password' => $request->input('password'),
             'can_access_account' => $request->input('can_access_account')
         ]);
 
-        return redirect()->route('clients.edit');
+        $user->save();
+
+        return response()->json([]);
+        // return redirect()->route('clients.edit');
+    }
+
+    public function changeAccountAccess(Request $request, string $id)
+    {
+        $account_access = $request->input('can_access_account');
+        $user = User::query()->find($id);
+        $user->can_access_account = $account_access;
+        $user->save();
+        info($user);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(string $id)
     {
-        // $user->delete();
+        if (!$id) {
+            throw new NotFoundHttpException();
+        }
+
+        $user = User::query()->where('id', '=', $id)->delete();
+
+        return $user;
     }
 }
