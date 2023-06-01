@@ -1,34 +1,49 @@
 # php-validation
+
 Teste Técnico
 
 ## Como executar o sistema
 
+Copie o arquivo `.env.example` e cole como `.env`. É necessário preencher os campos:
+
+```
+RECAPTCHA_SITE_KEY=
+RECAPTCHA_SECRET_KEY=
+```
+
+Para conseguir as chaves basta abrir o site: https://www.google.com/recaptcha/admin/create
+
 Basta usar o seguinte comando no terminal:
+
 ```
 ./vendor/bin/sail up
 ```
+
 Isso faz com que a aplicação Laravel execute num container.
 
 Para executar as migrations basta entrar dentro do container onde se encontra o Laravel e executar:
+
 ```
 php artisan migrate
 ```
 
 Caso queira popular o banco rapidamente execute:
+
 ```
 php artisan db:seed
 ```
 
 Rode esse comando fora do container para instalar dependências:
+
 ```
 npm i
 ```
 
 Para renderizar as Views rode sempre esse comando ao iniciar o projeto:
+
 ```
 npm run dev
 ```
-
 
 Para usar a tabela com ordenação a aplicação tem esse pacote:
 https://github.com/s-damian/larasort

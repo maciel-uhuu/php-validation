@@ -4,6 +4,7 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,24 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth.session'])->group(function () {
-    Route::resource('clients', UsersController::class);
-    Route::post("/signout", [SessionController::class, 'destroy']);
-});
-Route::middleware(['auth.session'])->resource('clients', UsersController::class);
-Route::middleware(['guest'])->group(function () {
-    Route::get("/signin", [SessionController::class, 'create']);
-    Route::post("/signin", [SessionController::class, 'store'])->name('signin.store');
-    Route::get("/signup", [UsersController::class, 'create']);
-    Route::post("/signup", [UsersController::class, 'store'])->name('signup.store');;
-});
-
 Route::fallback(function () {
-    $session_user = Auth::user();
-
-    if ($session_user) {
-        return redirect("/clients");
-    }
-
-    return redirect("/signin");
+  return redirect("/login");
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware(['auth'])->resource('clients', UsersController::class);
