@@ -1,0 +1,45 @@
+table {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+
+  thead {
+    border-bottom: 1px solid #bfb0db;
+  }
+
+  thead,
+  tbody {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  tr {
+    display: grid;
+    grid-template-columns: 60px 1fr 1fr 100px 26px 26px;
+    align-items: center;
+
+    td,
+    th {
+      display: flex;
+    }
+
+    td {
+      flex-direction: column;
+    }
+  }
+
+  button,
+  a {
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
