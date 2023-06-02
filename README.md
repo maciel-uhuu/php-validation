@@ -45,8 +45,24 @@ Para renderizar as Views rode sempre esse comando ao iniciar o projeto:
 npm run dev
 ```
 
+## Testes Automatizados
+
+A aplicação contêm testes automatizados, basta executar:
+
+```
+php artisan test
+```
+
 Para usar a tabela com ordenação a aplicação tem esse pacote:
 https://github.com/s-damian/larasort
+
+Na minha máquina WSL eu precisei obter alguns pacotes necessários para a aplicação:
+
+```
+sudo apt install php-xml
+sudo apt install php-curl
+sudo apt install php-sqlite3
+```
 
 # Teste para à vaga de Desenvolvedor Full Stack
 
