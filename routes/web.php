@@ -24,4 +24,4 @@ Route::fallback(function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::middleware(['auth'])->resource('clients', UsersController::class);
+Route::middleware(['auth'])->resource('clients', UsersController::class)->except(['show']);

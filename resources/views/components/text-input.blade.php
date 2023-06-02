@@ -1,7 +1,8 @@
 @props([
 'type' => 'text',
 'name',
-'label'
+'label',
+'value' => ''
 ])
 
 <div {{ $attributes->merge(['class' => 'app_input']) }}>
@@ -9,7 +10,7 @@
   <label for={{ $name }} class="col-md-4 col-form-label text-md-end">{{ $label }}</label>
   @endif
   <div class="col-md-6">
-    <input type={{ $type }} name="{{ $name }}" id="{{ $name }}" value="{{ old($name) }}"
+    <input type={{ $type }} name="{{ $name }}" id="{{ $name }}" value="{{ $value }}"
       class="form-control @error('{{ $name }}') is-invalid @enderror" />
 
     @error($name)

@@ -42,47 +42,45 @@ class UsersController extends Controller
   }
 
   /**
-   * Display the specified resource.
-   */
-  public function show(User $user)
-  {
-    return view('clients.show', ['client' => $user]);
-  }
-
-  /**
    * Show the form for editing the specified resource.
    */
-  public function edit(User $user)
+  public function edit(string $id)
   {
+    $user = User::query()->where('id', '=', $id)->first();
+
     return view('clients.edit', ['client' => $user]);
   }
 
   /**
    * Update the specified resource in storage.
    */
-  public function update(EditClientRequest $request, User $user)
+  public function update(EditClientRequest $request, string $id)
   {
+    $user = User::query()->where('id', '=', $id)->first();
+
     $email = $request->input('email');
 
     if ($email) {
-      $user_with_same_email = User::query()->where('email', '=', $email);
+      $user_with_same_email = User::query()->where('email', '=', $email)->first();
 
-      if ($user_with_same_email) {
-        return back()->withErrors(['error_message' => 'Este email já está em uso!']);
+      if ($user_with_same_email->id != $user->id) {
+        return back()->withErrors(['error_message' => 'This email is already in use!']);
       }
+    }
+
+    if ($request->input('password')) {
+      $user->update([
+        'password' => $request->input('password'),
+      ]);
     }
 
     $user->update([
       'name' => $request->input('name'),
       'email' => $email,
-      'password' => $request->input('password'),
       'can_access_account' => $request->input('can_access_account')
     ]);
 
     $user->save();
-
-    return response()->json([]);
-    // return redirect()->route('clients.edit');
   }
 
   public function changeAccountAccess(Request $request, string $id)
@@ -91,7 +89,6 @@ class UsersController extends Controller
     $user = User::query()->find($id);
     $user->can_access_account = $account_access;
     $user->save();
-    info($user);
   }
 
   /**

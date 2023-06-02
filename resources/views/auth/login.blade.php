@@ -56,6 +56,14 @@
               </div>
             </div>
 
+            <div class="row mb-3 col-md-6 offset-md-4">
+              @error('can_access_account')
+              <span class="invalid-feedback" style="display: block;" role="alert">
+                <strong>{{ $message }}</strong>
+              </span>
+              @enderror
+            </div>
+
             <div class="row mb-0">
               <div class="col-md-8 offset-md-4">
                 <button type="submit" class="btn btn-primary">

@@ -25,7 +25,7 @@ class EditClientRequest extends FormRequest
     return [
       'name' => 'min:2',
       'email' => 'email',
-      'password' => 'min:2|confirmed',
+      'password' => 'min:2|confirmed|nullable',
       'can_access_account' => 'boolean'
     ];
   }
