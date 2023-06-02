@@ -23,10 +23,10 @@ class EditClientRequest extends FormRequest
   public function rules(): array
   {
     return [
-      'name' => 'min:2',
-      'email' => 'email',
+      'name' => 'min:2|required',
+      'email' => 'email|required',
       'password' => 'min:2|confirmed|nullable',
-      'can_access_account' => 'boolean'
+      'can_access_account' => 'boolean|required'
     ];
   }
 }
