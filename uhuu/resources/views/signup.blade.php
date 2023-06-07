@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class='container'>
+    <div class='container mt-5'>
         <h1>Cadastro</h1>
         <hr>
-        <form action="" method="POST">
+        <form action="{{ route('client-store') }}" method="POST">
+            @csrf
             <div class='form.group'>
                 <div class="form-group">
                     <label for="name">Nome: </label>
@@ -21,15 +22,20 @@
                 </div>
                 <div class="form-group">
                     <label for="confirm_password">Repita a senha: </label>
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" onkeyup='check();'
-                        placeholder="Digite sua senha novamente">
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password"
+                        onkeyup='check();' placeholder="Digite sua senha novamente">
                     <span id='message'></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" name="submit" id="submit">
+
+                    <button onclick="location.href='/login'" type="button" class="btn btn-secondary">Já tenho uma
+                        conta</button>
+                    <button onclick="location.href='/'" type="button" class="btn btn-secondary"
+                        style="float: right">Voltar</button>
                 </div>
             </div>
         </form>
-        <button onclick="location.href='/login'" type="button" disabled id="post">Criar</button>
-        <button onclick="location.href='/login'" type="button">Já tenho uma conta</button>
-        <button onclick="location.href='/'" type="button">Voltar</button>
     </div>
 @endsection
 
@@ -40,11 +46,9 @@
                 document.getElementById('confirm_password').value) {
                 document.getElementById('message').style.color = 'green';
                 document.getElementById('message').innerHTML = 'matching';
-                document.getElementById('post').disabled = false;
             } else {
                 document.getElementById('message').style.color = 'red';
                 document.getElementById('message').innerHTML = 'not matching';
-                document.getElementById('post').disabled = true;
             }
         }
     </script>
