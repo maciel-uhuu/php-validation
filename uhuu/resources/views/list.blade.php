@@ -37,17 +37,25 @@
                                     href="{{ route('client-edit', ['id' => $client->id]) }}"><i
                                         class="fa fa-pencil"></i></a>
                                 @if ($client->active == 0)
-                                    <a class="btn btn-light" data-toggle="tooltip" title="Ativar"><i
-                                            class="fa fa-eye"></i></a>
+                                    <form action="{{ route('client-active', ['id' => $client->id]) }}" method="POST">
+                                        @csrf
+                                        @method('put')
+                                        <button type="submit" class="btn btn-light ml-2" data-toggle="tooltip"
+                                            title="Ativar"><i class="fa fa-eye"></i></button>
+                                    </form>
                                 @else
-                                    <a class="btn btn-light" data-toggle="tooltip" title="Desativar"><i
-                                            class="fa fa-eye-slash"></i></a>
+                                    <form action="{{ route('client-deactive', ['id' => $client->id]) }}" method="POST">
+                                        @csrf
+                                        @method('put')
+                                        <button type="submit" class="btn btn-light ml-2" data-toggle="tooltip"
+                                            title="Desativar"><i class="fa fa-eye-slash"></i></button>
+                                    </form>
                                 @endif
                                 <form action="{{ route('client-destroy', ['id' => $client->id]) }}" method="POST">
                                     @csrf
                                     @method('delete')
-                                    <button type="submit" class="btn btn-light ml-2" data-toggle="tooltip" title="Excluir"><i
-                                            class="fa fa-trash"></i></button>
+                                    <button type="submit" class="btn btn-light ml-2" data-toggle="tooltip"
+                                        title="Excluir"><i class="fa fa-trash"></i></button>
                                 </form>
                             </div>
                         </th>

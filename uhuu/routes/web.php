@@ -20,4 +20,6 @@ Route::prefix('client')->group(function(){
     Route::get('/{id}/edit', [Controller::class, 'edit'])->name('client-edit');
     Route::put('/{id}', [Controller::class, 'update'])->name('client-update');
     Route::delete('/{id}', [Controller::class, 'destroy'])->name('client-destroy');
+    Route::put('/{id}/active', [Controller::class, 'active'])->name('client-active');
+    Route::put('/{id}/deactive', [Controller::class, 'deactive'])->name('client-deactive');
 });

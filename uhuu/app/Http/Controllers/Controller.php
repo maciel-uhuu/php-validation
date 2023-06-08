@@ -72,4 +72,16 @@ class Controller extends BaseController
         Client::where('id', $id)->delete();
         return redirect()->back();
     }
+
+    public function active($id)
+    {
+        Client::where('id', $id)->update(['active'=>1]);
+        return redirect()->back();
+    }
+
+    public function deactive($id)
+    {
+        Client::where('id', $id)->update(['active'=>0]);
+        return redirect()->back();
+    }
 }
