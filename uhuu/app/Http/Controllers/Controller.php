@@ -1,0 +1,100 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Client;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Route;
+
+class Controller extends BaseController
+{
+    use AuthorizesRequests, ValidatesRequests;
+
+    public function list()
+    {
+        $clients = Client::sortable()->paginate(2);
+        return view('/list', ['clients' => $clients]);
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|min:5|max:35',
+            'email' => 'required|email|unique:clients',
+            'password' => 'required|min:6|max:20',
+            'g-recaptcha-response' => 'required|captcha'
+        ], [
+            'name.min' => ' O Nome deve ter entre 5 e 35 caracteres.',
+            'name.max' => ' O Nome deve ter entre 5 e 35 caracteres.',
+            'email.unique' => ' E-mail já cadastrado no sistema',
+            'email.email' => ' E-mail deve ser escrito corretamente',
+            'password.min' => ' A senha deve ter entre 6 e 20 caracteres.',
+            'password.max' => ' A senha deve ter entre 6 e 20 caracteres.',
+            'g-recaptcha-response.required' => 'Faça o ReCaptcha'
+        ]);
+
+        Client::create($request->all());
+        return redirect()->route('list');
+    }
+
+    public function edit($id)
+    {
+        $client = Client::where('id', $id)->first();
+        if (!empty($client)) {
+            return view('edit', ['client' => $client]);
+        } else return redirect()->route('list');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|min:5|max:35',
+            'password' => 'required|min:6|max:20',
+        ], [
+            'name.min' => ' O Nome deve ter entre 5 e 35 caracteres.',
+            'name.max' => ' O Nome deve ter entre 5 e 35 caracteres.',
+            'password.min' => ' A senha deve ter entre 6 e 20 caracteres.',
+            'password.max' => ' A senha deve ter entre 6 e 20 caracteres.'
+        ]);
+        $data = [
+            'name' => $request->name,
+            'password' => $request->password,
+        ];
+        Client::where('id', $id)->update($data);
+        return redirect()->route('list');
+    }
+
+    public function destroy($id)
+    {
+        Client::where('id', $id)->delete();
+        return redirect()->back();
+    }
+
+    public function active($id)
+    {
+        Client::where('id', $id)->update(['active' => 1]);
+        return redirect()->back();
+    }
+
+    public function deactive($id)
+    {
+        Client::where('id', $id)->update(['active' => 0]);
+        return redirect()->back();
+    }
+
+    public function login(Request $request)
+    {
+        $client = Client::where([['email', $request->email], ['password', $request->password]])->first();
+        if (empty($client)) {
+            throw ValidationException::withMessages(['email' => 'E-mail ou senha incorreta']);
+        };
+        if ($client->active == 0) {
+            throw ValidationException::withMessages(['email' => 'Usuário desativado']);
+        };
+        return view('profile', ['client' => $client]);
+    }
+}
