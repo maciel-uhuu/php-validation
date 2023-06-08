@@ -17,10 +17,10 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">E-mail</th>
-                    <th scope="col">Ativo</th>
+                    <th scope="col">@sortablelink('id')</th>
+                    <th scope="col">@sortablelink('name', 'Nome')</th>
+                    <th scope="col">@sortablelink('email', 'E-mail')</th>
+                    <th scope="col">@sortablelink('active', 'Ativo')</th>
                     <th scope="col">Opções</th>
                 </tr>
             </thead>
@@ -65,7 +65,7 @@
         </table>
         <div class="row">
             <div class="col-sm-10">
-                {{ $clients->onEachSide(1)->links() }}
+                {!! $clients->appends(\Request::except('page'))->render() !!}
             </div>
             <div class="col-sm-2">
                 <button onclick="location.href='/'" type="button" class="btn btn-secondary"

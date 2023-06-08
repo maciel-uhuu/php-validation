@@ -14,7 +14,7 @@ class Controller extends BaseController
 
     public function list()
     {
-        $clients = Client::orderBy(column: 'name')->paginate(2);
+        $clients = Client::sortable()->paginate(2);
         return view('/list', ['clients' => $clients]);
     }
 
