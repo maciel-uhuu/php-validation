@@ -23,14 +23,16 @@ class Controller extends BaseController
         $this->validate($request, [
             'name' => 'required|min:5|max:35',
             'email' => 'required|email|unique:clients',
-            'password' => 'required|min:6|max:20'
+            'password' => 'required|min:6|max:20',
+            'g-recaptcha-response' => 'required|captcha'
         ], [
             'name.min' => ' O Nome deve ter entre 5 e 35 caracteres.',
             'name.max' => ' O Nome deve ter entre 5 e 35 caracteres.',
             'email.unique' => ' E-mail já cadastrado no sistema',
             'email.email' => ' E-mail deve ser escrito corretamente',
             'password.min' => ' A senha deve ter entre 6 e 20 caracteres.',
-            'password.max' => ' A senha deve ter entre 6 e 20 caracteres.'
+            'password.max' => ' A senha deve ter entre 6 e 20 caracteres.',
+            'g-recaptcha-response.required' => 'Faça o ReCaptcha'
         ]);
 
         Client::create($request->all());
@@ -48,6 +50,15 @@ class Controller extends BaseController
 
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'name' => 'required|min:5|max:35',
+            'password' => 'required|min:6|max:20',
+        ], [
+            'name.min' => ' O Nome deve ter entre 5 e 35 caracteres.',
+            'name.max' => ' O Nome deve ter entre 5 e 35 caracteres.',
+            'password.min' => ' A senha deve ter entre 6 e 20 caracteres.',
+            'password.max' => ' A senha deve ter entre 6 e 20 caracteres.'
+        ]);
         $data = [
             'name' => $request->name,
             'password' => $request->password,

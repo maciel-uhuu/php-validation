@@ -37,6 +37,10 @@
                     <span id='message'></span>
                 </div>
                 <div class="form-group">
+                    {!! NoCaptcha::renderJs('pt-BR') !!}
+                    {!! NoCaptcha::display() !!}
+                </div>
+                <div class="form-group">
                     <button type="submit" class="btn btn-primary" name="submit" id="submit" disabled>Enviar</button>
 
                     <button onclick="location.href='/login'" type="button" class="btn btn-secondary">Já tenho uma
@@ -61,10 +65,6 @@
                 document.getElementById('message').innerHTML = 'Senhas não correspondentes';
                 document.getElementById('submit').disabled = true;
             }
-        }
-
-        var confirm = function() {
-
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
