@@ -20,8 +20,22 @@ class Controller extends BaseController
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required|min:5|max:35',
+            'email' => 'required|email|unique:clients',
+            'password' => 'required|min:6|max:20'
+        ], [
+            'name.min' => ' O Nome deve ter entre 5 e 35 caracteres.',
+            'name.max' => ' O Nome deve ter entre 5 e 35 caracteres.',
+            'email.unique' => ' E-mail já cadastrado no sistema',
+            'email.email' => ' E-mail deve ser escrito corretamente',
+            'password.min' => ' A senha deve ter entre 6 e 20 caracteres.',
+            'password.max' => ' A senha deve ter entre 6 e 20 caracteres.'
+        ]);
+
         Client::create($request->all());
         return redirect()->route('list');
+
     }
 
     public function edit($id)
