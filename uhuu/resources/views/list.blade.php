@@ -2,18 +2,7 @@
 
 @section('content')
     <div class="container mt-5">
-        <div class="row">
-            <div class="col-sm-9">
-                <h1>Clientes</h1>
-            </div>
-            <div class="col-sm-3">
-                <select class="custom-select custom-select-sm" style="margin-bottom: -30px">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option selected value="20">20</option>
-                </select>
-            </div>
-        </div>
+        <h1>Clientes</h1>
         <table class="table table-hover">
             <thead>
                 <tr>

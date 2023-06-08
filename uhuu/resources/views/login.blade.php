@@ -4,7 +4,17 @@
     <div class='container mt-5'>
         <h1>Login</h1>
         <hr>
-        <form action="{{ route('client-store') }}" method="GET">
+        @if (count($errors))
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ $error }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endforeach
+        @endif
+        <form action="{{ route('client-login') }}" method="GET">
             @csrf
             <div class='form.group'>
                 <div class="form-group">
@@ -19,7 +29,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary" name="submit" id="submit">Entrar</button>
+                <input type="submit" class="btn btn-primary" name="submit" id="submit" value="Entrar">
 
                 <button onclick="location.href='/signup'" type="button" class="btn btn-secondary">Não tenho uma
                     conta</button>
@@ -28,4 +38,9 @@
             </div>
         </form>
     </div>
+@endsection
+
+@section('javascript')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 @endsection

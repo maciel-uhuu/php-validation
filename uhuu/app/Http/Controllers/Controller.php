@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Route;
 
 class Controller extends BaseController
 {
@@ -37,7 +39,6 @@ class Controller extends BaseController
 
         Client::create($request->all());
         return redirect()->route('list');
-
     }
 
     public function edit($id)
@@ -75,13 +76,25 @@ class Controller extends BaseController
 
     public function active($id)
     {
-        Client::where('id', $id)->update(['active'=>1]);
+        Client::where('id', $id)->update(['active' => 1]);
         return redirect()->back();
     }
 
     public function deactive($id)
     {
-        Client::where('id', $id)->update(['active'=>0]);
+        Client::where('id', $id)->update(['active' => 0]);
         return redirect()->back();
+    }
+
+    public function login(Request $request)
+    {
+        $client = Client::where([['email', $request->email], ['password', $request->password]])->first();
+        if (empty($client)) {
+            throw ValidationException::withMessages(['email' => 'E-mail ou senha incorreta']);
+        };
+        if ($client->active == 0) {
+            throw ValidationException::withMessages(['email' => 'Usuário desativado']);
+        };
+        return view('profile', ['client' => $client]);
     }
 }
