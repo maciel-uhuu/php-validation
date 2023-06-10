@@ -12,7 +12,7 @@ Banco de dados:
 
 Bônus
     API Rest JSON para todos os CRUDS listados acima - OK
-    Permitir deleção em massa de itens nos CRUDs - Not OK
+    Permitir deleção em massa de itens nos CRUDs - OK
     Permitir que o usuário mude o número de itens por página - OK
     Implementar autenticação de usuário na aplicação - OK
     Testes unitários - Not OK

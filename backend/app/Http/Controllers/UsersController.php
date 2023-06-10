@@ -13,6 +13,10 @@ class UsersController extends Controller
     {
         $limit = $request->query('limit', 20);
 
+        if ($request->user()->type != 1) {
+            return response()->json(['error' => 'Você não tem permissão para acessar esse recurso'], 403);
+        }
+
         try {
             $users = User::paginate($limit);
             return response()->json($users, 200);
@@ -26,6 +30,10 @@ class UsersController extends Controller
     {
         $limit = $request->query('limit', 20);
 
+        if ($request->user()->type != 1) {
+            return response()->json(['error' => 'Você não tem permissão para acessar esse recurso'], 403);
+        }
+
         try {
             $users = User::where('type', 0)->paginate($limit);
             return response()->json($users, 200);
@@ -36,6 +44,9 @@ class UsersController extends Controller
     }
 
     public function filter(Request $request) {
+        if ($request->user()->type != 1) {
+            return response()->json(['error' => 'Você não tem permissão para acessar esse recurso'], 403);
+        }
 
         $request->validate([
             'key' => 'required|max:100',
@@ -173,6 +184,30 @@ class UsersController extends Controller
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['error' => 'Erro ao deletar o usuário'], 400);
+        }
+    }
+
+    public function destroyMany(Request $request) {
+        if ($request->user()->type != 1) {
+            return response()->json(['error' => 'Você não tem permissão para acessar esse recurso'], 403);
+        }
+
+        try {
+            $ids = $request->validate([
+                'ids' => 'required|array',
+            ])['ids'];
+
+            $users = User::whereIn('id', $ids)->get();
+
+            if (!$users) {
+                return response()->json(['error' => 'Usuários não encontrados'], 404);
+            }
+
+            User::whereIn('id', $ids)->delete();
+            return response()->json(['message' => 'Usuários deletados com sucesso'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['error' => 'Erro ao deletar os usuários'], 400);
         }
     }
 }
