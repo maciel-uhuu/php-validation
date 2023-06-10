@@ -25,3 +25,4 @@ Route::prefix('auth')->group(function(){
     Route::post('/register', [CustomerController::class, 'store'])->name('register.customer');
 });
 
+Route::resource('customers', CustomerController::class);

@@ -4,7 +4,7 @@ namespace App\Http\Requests\Customer;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     public function messages()
     {
@@ -13,7 +13,6 @@ class StoreRequest extends FormRequest
             'string' => 'O(a) :attribute deve ser uma string',
             'email' => 'O (a):attribute não está formatado corretamente',
             'max' => 'O(a) :attribute deve ter no máximo o tamanho de :max caracteres',
-            'min' => 'O(a) :attribute deve ter no mínimo o tamanho de :min caracteres',
         ];
     }
 
@@ -27,7 +26,6 @@ class StoreRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'email' => 'required|email',
-            'password' => 'required|min:6',
         ];
     }
 }
