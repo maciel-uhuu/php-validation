@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User as User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class UsersController extends Controller
 {
@@ -11,37 +13,60 @@ class UsersController extends Controller
     {
         $limit = $request->query('limit', 20);
 
-        $users = User::paginate($limit);
-        return response()->json($users, 200);
+        try {
+            $users = User::paginate($limit);
+            return response()->json($users, 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Erro ao buscar os usuários'], 400);
+        }
+    }
+
+    public function findClients(Request $request)
+    {
+        $limit = $request->query('limit', 20);
+
+        try {
+            $users = User::where('type', 0)->paginate($limit);
+            return response()->json($users, 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Erro ao buscar os clientes'], 400);
+        }
     }
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:100',
-            'email' => 'required|unique:users|max:100',
-            'document' => 'required|unique:users|max:20',
-            'address' => 'required|max:100',
-            'phone' => 'required|max:20',
-            'status' => 'required|max:1',
-            'password' => 'required|max:100',
-            'type' => 'required|max:1',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|max:100',
+                'email' => 'required|max:100',
+                'document' => 'required|max:20',
+                'address' => 'required|max:100',
+                'phone' => 'required|max:20',
+                'status' => 'int',
+                'password' => 'required|max:100',
+                'type' => 'int',
+            ]);
 
-        $validated['password'] = bcrypt($validated['password']);
+            $userEmailExists = User::where('email', $validated['email'])->first();
+            $userDocumentExists = User::where('document', $validated['document'])->first();
 
+            if ($userEmailExists) {
+                return throw ValidationException::withMessages(['email' => 'Email já cadastrado']);
+            }
 
-        $user = new User;
+            if ($userDocumentExists) {
+                return throw ValidationException::withMessages(['document' => 'Documento já cadastrado']);
+            }
 
-        $user->fill($validated);
+            $validated['password'] = bcrypt($validated['password']);
 
-        if ($user->save()) {
+            $user = User::create($validated);
             return response()->json($user, 201);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 400);
         }
-
-        return response()->json(['error' => 'Erro ao criar o usuário'], 400);
     }
 
     /**
@@ -49,23 +74,66 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json(['error' => 'Usuário não encontrado'], 404);
+            }
+
+            return response()->json($user, 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Erro ao buscar o usuário'], 400);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'name' => 'max:100',
+                'email' => 'max:100',
+                'document' => 'max:20',
+                'address' => 'max:100',
+                'phone' => 'max:20',
+                'status' => 'int',
+                'password' => 'max:100',
+                'type' => 'int',
+            ]);
+
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json(['error' => 'Usuário não encontrado'], 404);
+            }
+
+            if (isset($validated['email'])) {
+                $userEmailExists = User::where('email', $validated['email'])->first();
+
+                if ($userEmailExists && $userEmailExists->id != $id) {
+                    return throw ValidationException::withMessages(['email' => 'Email já cadastrado']);
+                }
+            }
+
+
+            if (isset($validated['document'])) {
+                $userDocumentExists = User::where('document', $validated['document'])->first();
+
+                if ($userDocumentExists && $userDocumentExists->id != $id) {
+                    return throw ValidationException::withMessages(['document' => 'Documento já cadastrado']);
+                }
+            }
+
+            if (isset($validated['password'])) {
+                $validated['password'] = bcrypt($validated['password']);
+            }
+
+            $user->update($validated);
+            return response()->json($user, 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 400);
+        }
     }
 
     /**
@@ -73,6 +141,17 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json(['error' => 'Usuário não encontrado'], 404);
+            }
+
+            $user->delete();
+            return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => 'Erro ao deletar o usuário'], 400);
+        }
     }
 }
