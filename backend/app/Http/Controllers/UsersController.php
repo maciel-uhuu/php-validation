@@ -17,6 +17,7 @@ class UsersController extends Controller
             $users = User::paginate($limit);
             return response()->json($users, 200);
         } catch (\Throwable $th) {
+            Log::error($th);
             return response()->json(['error' => 'Erro ao buscar os usuários'], 400);
         }
     }
@@ -29,12 +30,11 @@ class UsersController extends Controller
             $users = User::where('type', 0)->paginate($limit);
             return response()->json($users, 200);
         } catch (\Throwable $th) {
+            Log::error($th);
             return response()->json(['error' => 'Erro ao buscar os clientes'], 400);
         }
     }
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         try {
@@ -65,13 +65,11 @@ class UsersController extends Controller
             $user = User::create($validated);
             return response()->json($user, 201);
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()], 400);
+            Log::error($th);
+            return response()->json(['error' => 'Erro ao criar usuário'], 400);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         try {
@@ -83,10 +81,10 @@ class UsersController extends Controller
 
             return response()->json($user, 200);
         } catch (\Throwable $th) {
+            Log::error($th);
             return response()->json(['error' => 'Erro ao buscar o usuário'], 400);
         }
     }
-
 
     public function update(Request $request, string $id)
     {
@@ -132,13 +130,11 @@ class UsersController extends Controller
             $user->update($validated);
             return response()->json($user, 200);
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th->getMessage()], 400);
+            Log::error($th);
+            return response()->json(['error' => 'Erro ao editar usuário'], 400);
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         try {
@@ -151,6 +147,7 @@ class UsersController extends Controller
             $user->delete();
             return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
         } catch (\Throwable $th) {
+            Log::error($th);
             return response()->json(['error' => 'Erro ao deletar o usuário'], 400);
         }
     }
