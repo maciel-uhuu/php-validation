@@ -35,6 +35,30 @@ class UsersController extends Controller
         }
     }
 
+    public function filter(Request $request) {
+
+        $request->validate([
+            'key' => 'required|max:100',
+            'value' => 'required|max:100',
+        ]);
+
+        $key = $request->query('key');
+        $value = $request->query('value');
+
+        $orderBy = $request->query('orderBy', 'name');
+        $order = $request->query('order', 'asc');
+
+        $limit = $request->query('limit', 20);
+
+        try {
+            $users = User::where($key, 'like', "%$value%")->orderBy($orderBy, $order)->paginate($limit);
+            return response()->json($users, 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['error' => $th->getMessage()], 400);
+        }
+    }
+
     public function store(Request $request)
     {
         try {

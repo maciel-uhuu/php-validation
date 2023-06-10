@@ -36,7 +36,7 @@ class AuthController extends Controller
         $user = User::where('email', $credentials['email'])->first();
 
         if ($user->status != 1) {
-            return response()->json(['error' => 'Usuário desativado.'], 400);
+            return response()->json(['error' => 'Usuário desativado.'], 401);
         }
 
         if (!$token = auth()->attempt($credentials)) {
