@@ -12,7 +12,7 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('users/filter', [UsersController::class, 'filter']);
     Route::get('users/{id}', [UsersController::class, 'show']);
     Route::put('users/{id}', [UsersController::class, 'update']);
-    Route::delete('users/delete_many', [UsersController::class, 'destroyMany']);
+    Route::delete('users/delete-many', [UsersController::class, 'destroyMany']);
     Route::delete('users/{id}', [UsersController::class, 'destroy']);
 
     // clients

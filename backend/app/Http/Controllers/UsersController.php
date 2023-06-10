@@ -22,7 +22,7 @@ class UsersController extends Controller
             return response()->json($users, 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['error' => 'Erro ao buscar os usuários'], 400);
+            return response()->json(['error' => 'Erro ao buscar os usuários'], 500);
         }
     }
 
@@ -39,7 +39,7 @@ class UsersController extends Controller
             return response()->json($users, 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['error' => 'Erro ao buscar os clientes'], 400);
+            return response()->json(['error' => 'Erro ao buscar os clientes'], 500);
         }
     }
 
@@ -66,7 +66,7 @@ class UsersController extends Controller
             return response()->json($users, 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['error' => $th->getMessage()], 400);
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 
@@ -101,7 +101,7 @@ class UsersController extends Controller
             return response()->json($user, 201);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['error' => 'Erro ao criar usuário'], 400);
+            return response()->json(['error' => 'Erro ao criar usuário'], 500);
         }
     }
 
@@ -117,7 +117,7 @@ class UsersController extends Controller
             return response()->json($user, 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['error' => 'Erro ao buscar o usuário'], 400);
+            return response()->json(['error' => 'Erro ao buscar o usuário'], 500);
         }
     }
 
@@ -166,7 +166,7 @@ class UsersController extends Controller
             return response()->json($user, 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['error' => 'Erro ao editar usuário'], 400);
+            return response()->json(['error' => 'Erro ao editar usuário'], 500);
         }
     }
 
@@ -183,7 +183,7 @@ class UsersController extends Controller
             return response()->json(['message' => 'Usuário deletado com sucesso'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['error' => 'Erro ao deletar o usuário'], 400);
+            return response()->json(['error' => 'Erro ao deletar o usuário'], 500);
         }
     }
 
@@ -199,15 +199,15 @@ class UsersController extends Controller
 
             $users = User::whereIn('id', $ids)->get();
 
-            if (!$users) {
-                return response()->json(['error' => 'Usuários não encontrados'], 404);
+            if (count($ids) != count($users)) {
+                return response()->json(['error' => 'Um ou mais usuários não foram encontrados'], 404);
             }
 
             User::whereIn('id', $ids)->delete();
             return response()->json(['message' => 'Usuários deletados com sucesso'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['error' => 'Erro ao deletar os usuários'], 400);
+            return response()->json(['error' => 'Erro ao deletar os usuários'], 500);
         }
     }
 }

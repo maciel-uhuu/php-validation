@@ -35,12 +35,16 @@ class AuthController extends Controller
 
         $user = User::where('email', $credentials['email'])->first();
 
+        if (!$user) {
+            return response()->json(['error' => 'Email ou senha incorretos'], 401);
+        }
+
         if ($user->status != 1) {
             return response()->json(['error' => 'Usuário desativado.'], 401);
         }
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Email/senha incorretos'], 401);
+            return response()->json(['error' => 'Email ou senha incorretos'], 401);
         }
 
         return response()->json([
