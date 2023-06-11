@@ -34,3 +34,9 @@ img {
   width: 100%;
   display: block;
 }
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
