@@ -5,43 +5,90 @@ import { User } from "../../interfaces";
 import {
   ActionsWrapper,
   HomeContent,
+  HomeFilterWrapper,
   HomeIntroduction,
   HomeWrapper,
-  PaginationWrapper,
-  PginationContent,
 } from "./styles";
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+
 import { AddClient } from "../../components/AddClient";
 import { EditClient } from "../../components/EditClient";
 import { api } from "../../config/services/api";
 import { useCookies } from "react-cookie";
+import { filterOptions } from "../../constants/filterOptions";
 
 export const Home = () => {
-  const { user, getClients, clients } = useRootContext();
-  const [data, setData] = useState<User[]>([]);
+  const { user, getClients, data, setError, error } = useRootContext();
+  const [clients, setClients] = useState<User[]>([]);
+  const [count, setCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
   const [cookies, setCookie, removeCookie] = useCookies(["uhuu-token"]);
+  const [filter, setFilter] = useState({
+    key: "name",
+    value: "",
+  });
 
   useEffect(() => {
     getClients();
   }, []);
 
   useEffect(() => {
-    setData(clients);
-  }, [clients]);
+    setClients(data.data as User[]);
+    setCount(data.total);
+    setPage(data.page);
+  }, [data]);
+
+  console.log(clients);
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFilter({
+      ...filter,
+      [event.target.id]: event.target.value,
+    });
+  };
+
+  const handleFilter = async () => {
+    if (filter.value === "") {
+      setError("Preencha o campo de filtro");
+      return;
+    }
+
+    if (filter.value.length < 3) {
+      setError("O campo de filtro deve ter no mínimo 3 caracteres");
+      return;
+    }
+
+    try {
+      const { data } = await api.get("/api/users/filter", {
+        params: {
+          key: filter.key,
+          value: filter.value,
+        },
+        headers: {
+          Authorization: `Bearer ${cookies["uhuu-token"]}`,
+        },
+      });
+
+      setClients(data.data);
+    } catch (error: any) {
+      console.log(error);
+      setError(error.response.data.error);
+    }
+  };
 
   const handleDelete = async (id: number) => {
+    if (!window.confirm("Deseja realmente excluir esse cliente?")) return;
+
     try {
       await api.delete(`/api/users/${id}`, {
         headers: {
-          Authorization: `Bearer ${cookies["uhuu-token"]}`, 
+          Authorization: `Bearer ${cookies["uhuu-token"]}`,
         },
       });
 
@@ -65,83 +112,93 @@ export const Home = () => {
           <AddClient />
         </HomeIntroduction>
 
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">ID</TableCell>
-                <TableCell align="center">Nome</TableCell>
-                <TableCell align="center">Email</TableCell>
-                <TableCell align="center">Celular</TableCell>
-                <TableCell align="center">Endereço</TableCell>
-                <TableCell align="center">Documento</TableCell>
-                <TableCell align="center">Status</TableCell>
-                <TableCell align="center">Ações</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {data.map((data: User) => (
-                <TableRow
-                  key={data.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="center">{data.id}</TableCell>
-                  <TableCell align="center">{data.name}</TableCell>
-                  <TableCell align="center">{data.email}</TableCell>
-                  <TableCell align="center">{data.address}</TableCell>
-                  <TableCell align="center">{data.document}</TableCell>
-                  <TableCell align="center">{data.phone}</TableCell>
-                  <TableCell align="center">
-                    {data.status === 1 ? "Ativo" : "Inativo"}
-                  </TableCell>
-                  <TableCell align="center">
-                    <ActionsWrapper>
-                      <EditClient id={data.id} />
-                      <button
-                        className="delete-client-button"
-                        onClick={() => {
-                          handleDelete(data.id);
-                        }}
-                      >
-                        Excluir
-                      </button>
-                    </ActionsWrapper>
-                  </TableCell>
-                </TableRow>
-              ))}
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right">
-                  <PaginationWrapper>
-                    <span className="span-page">Pag: 1</span>
+        <HomeFilterWrapper>
+          <div>
+            <span>Filtrar por: </span>
+            <input
+              type="text"
+              id="value"
+              value={filter.value}
+              onChange={handleChange}
+            />
+            <select
+              name="key"
+              id="key"
+              onChange={handleChange}
+              value={filter.key}
+            >
+              {filterOptions.map((option) => {
+                return <option value={option.value}>{option.label}</option>;
+              })}
+            </select>
+          </div>
+          <button type="button" onClick={handleFilter}>
+            Filtrar
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              getClients();
+              setFilter({
+                key: "name",
+                value: "",
+              });
+            }}
+            disabled={filter.value === ""}
+            className="clear-button"
+          >
+            Limpar
+          </button>
+        </HomeFilterWrapper>
 
-                    <PginationContent>
-                      <span className="span-page">Qtd por página: </span>
-                      <select
-                        className="span-page"
-                        name="qtdPerPage"
-                        id="qtdPerPage"
-                      >
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                      </select>
+        {error && <span style={{ color: "red" }}>{error}</span>}
 
-                      <button type="button">Anterior</button>
-                      <button type="button">Próxima</button>
-                    </PginationContent>
-                  </PaginationWrapper>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <DataGrid
+          rows={clients}
+          rowCount={count}
+          columns={[
+            { field: "id", headerName: "ID", width: 70 },
+            { field: "name", headerName: "Nome", width: 200 },
+            { field: "email", headerName: "Email", width: 200 },
+            { field: "phone", headerName: "Celular", width: 200 },
+            { field: "address", headerName: "Endereço", width: 200 },
+            { field: "document", headerName: "Documento", width: 200 },
+            {
+              field: "status",
+              headerName: "Status",
+              width: 200,
+            },
+            {
+              field: "actions",
+              headerName: "Ações",
+              width: 200,
+              renderCell: (params) => (
+                <ActionsWrapper>
+                  <EditClient id={params.row.id} />
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(params.row.id)}
+                    className="delete-client-button"
+                  >
+                    Excluir
+                  </button>
+                </ActionsWrapper>
+              ),
+            },
+          ]}
+          checkboxSelection
+          disableRowSelectionOnClick
+          disableColumnFilter
+          disableColumnMenu
+          autoPageSize={false}
+          onPaginationModelChange={(params) => {
+            setPaginationModel(params);
+            getClients(params.page + 1, params.pageSize);
+          }}
+          paginationModel={paginationModel}
+          paginationMode="server"
+          pageSizeOptions={[5, 10, 25]}
+        />
       </HomeContent>
     </HomeWrapper>
   );

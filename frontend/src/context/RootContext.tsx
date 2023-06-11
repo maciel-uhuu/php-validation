@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { User } from "../interfaces";
 import { api } from "../config/services/api";
 import { useCookies } from "react-cookie";
@@ -12,9 +18,9 @@ interface RootContext {
   setHasAccount: (value: boolean) => void;
   user: User;
   setUser: (value: User) => void;
-  getClients: () => void;
-  clients: User[];
-  setClients: (value: User[]) => void;
+  getClients: (page?: number, limit?: number) => void;
+  data: any;
+  setData: any;
   error: string;
   setError: (value: string) => void;
 }
@@ -24,23 +30,26 @@ export const RootContext = createContext({} as RootContext);
 export const RootContextProvider = ({ children }: RootContextProviderProps) => {
   const [hasAccount, setHasAccount] = useState(true);
   const [user, setUser] = useState<User>({} as User);
-  const [clients, setClients] = useState<User[]>([]);
+  const [data, setData] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(["uhuu-token"]);
   const [error, setError] = useState("");
 
-  const getClients = async () => {
-    console.log("getClients")
+  const getClients = async (page = 1, limit = 10) => {
     try {
       const { data } = await api.get("/api/clients", {
         headers: {
           Authorization: `Bearer ${cookies["uhuu-token"]}`,
         },
+        params: {
+          page,
+          limit,
+        },
       });
 
-      setClients(data.data);
+      setData(data);
     } catch (error) {
       console.log(error);
-    }  
+    }
   };
 
   useEffect(() => {
@@ -59,8 +68,8 @@ export const RootContextProvider = ({ children }: RootContextProviderProps) => {
         user,
         setUser,
         getClients,
-        clients,
-        setClients,
+        data,
+        setData,
         error,
         setError,
       }}

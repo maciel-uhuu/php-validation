@@ -89,7 +89,7 @@ export const LoginForm = () => {
         </div>
 
         <ReCAPTCHA
-          sitekey={"6LdnqYsmAAAAAPSbiWp5asn8Ze9qZdXJ2LSAIvzN"}
+          sitekey={RECAPTCHA_KEY}
           onChange={() => setCaptcha(true)}
         />
 
