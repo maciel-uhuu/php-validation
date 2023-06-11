@@ -1,7 +1,23 @@
 import styled from "styled-components";
 
-export const LoginWrapper = styled.section`
+export const AddClientButton = styled.button`
+  padding: 10px 20px;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  background-color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.white};
+  border-radius: 5px;
+
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+
+export const RegisterWrapper = styled.section`
   text-align: center;
+  padding: 20px 0;
 
   h1 {
     color: ${({ theme }) => theme.colors.secondary};
@@ -14,7 +30,7 @@ export const LoginWrapper = styled.section`
   }
 `;
 
-export const LoginFormWrapper = styled.form`
+export const RegisterFormWrapper = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,15 +38,24 @@ export const LoginFormWrapper = styled.form`
   gap: 20px;
 
   width: 100%;
-  max-width: 400px;
-  padding: 60px;
+  padding: 20px 40px;
   margin-top: 20px;
 
   background-color: ${({ theme }) => theme.colors.white};
-
-  border-radius: 10px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   text-align: left;
+
+  .form-double-inputs-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    width: 100%;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
 
   .form-input-box {
     display: flex;
@@ -68,14 +93,12 @@ export const LoginFormWrapper = styled.form`
 
   .form-button-box {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 20px;
 
     width: 100%;
 
-    button {
+    button, .close-modal {
       padding: 10px 30px;
       font-size: clamp(1rem, 2vw, 1.25rem);
       background-color: ${({ theme }) => theme.colors.secondary};
@@ -87,22 +110,13 @@ export const LoginFormWrapper = styled.form`
       &:hover {
         background-color: ${({ theme }) => theme.colors.primary};
       }
-
-      &:disabled {
-        cursor: not-allowed;
-      }
     }
 
-    span {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      color: ${({ theme }) => theme.colors.primary};
-      font-size: clamp(1rem, 2vw, 1.25rem);
+    .close-modal {
+      background-color: ${({ theme }) => theme.colors.primary};
 
-      .form-dont-have-account {
-        color: ${({ theme }) => theme.colors.secondary};
-        font-weight: bold;
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.secondary};
       }
     }
   }

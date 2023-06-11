@@ -4,17 +4,14 @@ import {
   LogoSection,
 } from "./styles";
 import logo from "../../assets/logo.png";
-import { LoginForm } from "../../components/loginForm";
-import { RegisterForm } from "../../components/registerForm";
-import { useRootContext } from "../../context/RootContext";
+import { LoginForm } from "../../components/LoginForm";
 
 export const LoginAndRegister = () => {
-  const { hasAccount } = useRootContext();
 
   return (
     <LoginAndRegisterWrapper>
       <LoginAndRegisterSection>
-        {hasAccount ? <LoginForm /> : <RegisterForm />}
+        <LoginForm />
       </LoginAndRegisterSection>
       <LogoSection>
         <img src={logo} alt="Uhuu!" />

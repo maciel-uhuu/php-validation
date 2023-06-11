@@ -1,7 +1,23 @@
 import styled from "styled-components";
 
+export const EditClientButton = styled.button`
+  padding: 5px;
+  font-size: clamp(1rem, 2vw, 1rem);
+  background-color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.white};
+  border-radius: 5px;
+
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+
 export const RegisterWrapper = styled.section`
   text-align: center;
+  padding: 20px 0;
 
   h1 {
     color: ${({ theme }) => theme.colors.secondary};
@@ -22,13 +38,10 @@ export const RegisterFormWrapper = styled.form`
   gap: 20px;
 
   width: 100%;
-  padding: 60px;
+  padding: 20px 40px;
   margin-top: 20px;
 
   background-color: ${({ theme }) => theme.colors.white};
-
-  border-radius: 10px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
   text-align: left;
 
   .form-double-inputs-box {
@@ -59,7 +72,7 @@ export const RegisterFormWrapper = styled.form`
       font-size: clamp(1rem, 2vw, 1.25rem);
     }
 
-    input {
+    input, select {
       font-size: clamp(1rem, 2vw, 1.25rem);
 
       width: 100%;
@@ -80,14 +93,12 @@ export const RegisterFormWrapper = styled.form`
 
   .form-button-box {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 20px;
 
     width: 100%;
 
-    button {
+    button, .close-modal {
       padding: 10px 30px;
       font-size: clamp(1rem, 2vw, 1.25rem);
       background-color: ${({ theme }) => theme.colors.secondary};
@@ -101,18 +112,11 @@ export const RegisterFormWrapper = styled.form`
       }
     }
 
-    span {
-      color: ${({ theme }) => theme.colors.primary};
-      font-size: clamp(1rem, 2vw, 1.25rem);
+    .close-modal {
+      background-color: ${({ theme }) => theme.colors.primary};
 
-      .form-register-link {
-        color: ${({ theme }) => theme.colors.secondary};
-        font-weight: bold;
-        cursor: pointer;
-
-        &:hover {
-          text-decoration: underline;
-        }
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.secondary};
       }
     }
   }

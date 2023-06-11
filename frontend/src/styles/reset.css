@@ -40,3 +40,7 @@ button {
   background: none;
   cursor: pointer;
 }
+
+button:disable {
+  cursor: not-allowed;
+}

@@ -5,9 +5,12 @@ import { api } from "../../config/services/api";
 import { useCookies } from "react-cookie";
 import { User } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
+
+const RECAPTCHA_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
 
 export const LoginForm = () => {
-  const { setHasAccount, hasAccount, setUser } = useRootContext();
+  const { setUser, error, setError } = useRootContext();
   const [cookies, setCookie, removeCookie] = useCookies(["uhuu-token"]);
   const navigate = useNavigate();
 
@@ -15,8 +18,8 @@ export const LoginForm = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [captcha, setCaptcha] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
@@ -28,14 +31,18 @@ export const LoginForm = () => {
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setLoading(true);
-
     if (!form.email || !form.password) {
       setError("Preencha todos os campos");
       return;
     }
 
+    if (!captcha) {
+      setError("reCAPTCHA é obrigatório");
+      return;
+    }
+
     try {
+      setLoading(true);
       const { data } = await api.post("/api/login", form);
 
       setCookie("uhuu-token", data.token);
@@ -54,7 +61,7 @@ export const LoginForm = () => {
     <LoginWrapper>
       <div>
         <h1>Uhuu!</h1>
-        <span>Por uma vida com mais Uhuu!</span>
+        <span>Bem vindo á administração de clientes!</span>
       </div>
 
       <LoginFormWrapper onSubmit={handleLogin}>
@@ -81,19 +88,19 @@ export const LoginForm = () => {
           {error && <span style={{ color: "red" }}>{error}</span>}
         </div>
 
+        <ReCAPTCHA
+          sitekey={"6LdnqYsmAAAAAPSbiWp5asn8Ze9qZdXJ2LSAIvzN"}
+          onChange={() => setCaptcha(true)}
+        />
+
         <div className="form-button-box">
           <button type="submit" disabled={loading}>
             {loading ? "Carregando..." : "Entrar"}
           </button>
           <span>
-            Não tem uma conta?{" "}
-            <span
-              className="form-register-link"
-              onClick={() => {
-                setHasAccount(!hasAccount);
-              }}
-            >
-              Cadastre-se
+            Não tem uma conta?
+            <span className="form-dont-have-account">
+              Peça para o administrador criar uma para você!
             </span>
           </span>
         </div>

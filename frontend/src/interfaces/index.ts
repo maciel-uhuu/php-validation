@@ -5,8 +5,8 @@ export interface User {
   document: string;
   address: string;
   phone: string;
-  status: string;
-  type: string;
+  status: number;
+  type: number;
   created_at: string;
   updated_at: string;
 }
