@@ -62,7 +62,11 @@ class UsersController extends Controller
         $limit = $request->query('limit', 20);
 
         try {
-            $users = User::where($key, 'like', "%$value%")->orderBy($orderBy, $order)->paginate($limit);
+            // type 0
+            $users = User::where($key, 'like', "%$value%")
+                ->where('type', 0)
+                ->orderBy($orderBy, $order)
+                ->paginate($limit);
             return response()->json($users, 200);
         } catch (\Throwable $th) {
             Log::error($th);
@@ -88,11 +92,11 @@ class UsersController extends Controller
             $userDocumentExists = User::where('document', $validated['document'])->first();
 
             if ($userEmailExists) {
-                return throw ValidationException::withMessages(['email' => 'Email já cadastrado']);
+                return response()->json(['error' => 'Email já cadastrado'], 400);
             }
 
             if ($userDocumentExists) {
-                return throw ValidationException::withMessages(['document' => 'Documento já cadastrado']);
+                return response()->json(['error' => 'Documento já cadastrado'], 400);
             }
 
             $validated['password'] = bcrypt($validated['password']);
@@ -145,7 +149,7 @@ class UsersController extends Controller
                 $userEmailExists = User::where('email', $validated['email'])->first();
 
                 if ($userEmailExists && $userEmailExists->id != $id) {
-                    return throw ValidationException::withMessages(['email' => 'Email já cadastrado']);
+                    return response()->json(['error' => 'Email já cadastrado'], 400);
                 }
             }
 
@@ -154,7 +158,7 @@ class UsersController extends Controller
                 $userDocumentExists = User::where('document', $validated['document'])->first();
 
                 if ($userDocumentExists && $userDocumentExists->id != $id) {
-                    return throw ValidationException::withMessages(['document' => 'Documento já cadastrado']);
+                    return response()->json(['error' => 'Documento já cadastrado'], 400);
                 }
             }
 
