@@ -2,28 +2,28 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
-    // public function test_example(): void
-    // {
-    //     $response = $this->get('/');
+    use RefreshDatabase;
 
-    //     $response->assertStatus(200);
-    // }
+    protected function authenticate_user($args = [])
+    {
+        $user = User::factory()->create($args);
+
+        $token = auth()->login($user);
+
+        return $token;
+    }
 
     public function test_store_an_client(): void
     {
         $ramdomEmail = rand(1, 1000) . '@gmail.com';
         $ramdomDocument = rand(10000000000, 99999999999);
-
 
         $reponse = $this->post('/api/users', [
             'name' => 'Teste',
