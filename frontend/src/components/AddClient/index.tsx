@@ -45,8 +45,6 @@ export const AddClient = () => {
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setLoading(true);
-
     if (
       !form.name ||
       !form.email ||
@@ -59,7 +57,21 @@ export const AddClient = () => {
       return;
     }
 
+    const cpfRegex = /^[0-9]{11}$/;
+    if (!cpfRegex.test(form.document)) {
+      setError("CPF inválido");
+      return;
+    }
+
+    const phoneRegex = /^[0-9]{11}$/;
+    if (!phoneRegex.test(form.phone)) {
+      setError("Telefone inválido");
+      return;
+    }
+
     try {
+      setLoading(true);
+
       await api.post("/api/users", form);
       
       setForm({
@@ -111,6 +123,7 @@ export const AddClient = () => {
                     onChange={handleChange}
                     value={form.name}
                     required
+                    placeholder="Nome completo"
                   />
                 </div>
 
@@ -122,6 +135,7 @@ export const AddClient = () => {
                     onChange={handleChange}
                     value={form.email}
                     required
+                    placeholder="email@email.com"
                   />
                 </div>
               </div>
@@ -135,6 +149,8 @@ export const AddClient = () => {
                     onChange={handleChange}
                     value={form.document}
                     required
+                    maxLength={11}
+                    placeholder="Somente números (11 dígitos)"
                   />
                 </div>
 
@@ -146,6 +162,7 @@ export const AddClient = () => {
                     onChange={handleChange}
                     value={form.address}
                     required
+                    placeholder="Rua alguma coisa, 123"
                   />
                 </div>
               </div>
@@ -160,6 +177,7 @@ export const AddClient = () => {
                     value={form.phone}
                     required
                     maxLength={11}
+                    placeholder="Somente números (11 dígitos)"
                   />
                 </div>
 
@@ -171,6 +189,7 @@ export const AddClient = () => {
                     onChange={handleChange}
                     value={form.password}
                     required
+                    placeholder="Senha"
                   />
                 </div>
               </div>

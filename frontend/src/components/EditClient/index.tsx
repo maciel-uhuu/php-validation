@@ -45,7 +45,9 @@ export const EditClient = ({ id }: IProps) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({
       ...form,
       [event.target.id]: event.target.value,
@@ -90,6 +92,18 @@ export const EditClient = ({ id }: IProps) => {
       !form.phone
     ) {
       setError("Preencha todos os campos");
+      return;
+    }
+
+    const cpfRegex = /^[0-9]{11}$/;
+    if (!cpfRegex.test(form.document)) {
+      setError("CPF inválido");
+      return;
+    }
+
+    const phoneRegex = /^[0-9]{11}$/;
+    if (!phoneRegex.test(form.phone)) {
+      setError("Telefone inválido");
       return;
     }
 
