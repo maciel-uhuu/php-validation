@@ -2,9 +2,14 @@ import { useState } from "react";
 import { useRootContext } from "../../context/RootContext";
 import { LoginWrapper, LoginFormWrapper } from "./styles";
 import { api } from "../../config/services/api";
+import { useCookies } from "react-cookie";
+import { User } from "../../interfaces";
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm = () => {
-  const { setHasAccount, hasAccount } = useRootContext();
+  const { setHasAccount, hasAccount, setUser } = useRootContext();
+  const [cookies, setCookie, removeCookie] = useCookies(["uhuu-token"]);
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     email: "",
@@ -20,7 +25,9 @@ export const LoginForm = () => {
     });
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
     setLoading(true);
 
     if (!form.email || !form.password) {
@@ -31,14 +38,13 @@ export const LoginForm = () => {
     try {
       const { data } = await api.post("/api/login", form);
 
-      if (data.error) {
-        setError(data.message);
-      }
+      setCookie("uhuu-token", data.token);
+      setUser(data.user as User);
 
-      console.log(data);
-    } catch (error) {
+      navigate("/home");
+    } catch (error: any) {
       console.log(error);
-      setError("Erro ao realizar login");
+      setError(error.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -51,7 +57,7 @@ export const LoginForm = () => {
         <span>Por uma vida com mais Uhuu!</span>
       </div>
 
-      <LoginFormWrapper action="">
+      <LoginFormWrapper onSubmit={handleLogin}>
         <div className="form-input-box">
           <label htmlFor="email">Email</label>
           <input
@@ -72,11 +78,12 @@ export const LoginForm = () => {
             onChange={handleChange}
             required
           />
+          {error && <span style={{ color: "red" }}>{error}</span>}
         </div>
 
         <div className="form-button-box">
-          <button type="button" onClick={handleLogin}>
-            Entrar
+          <button type="submit" disabled={loading}>
+            {loading ? "Carregando..." : "Entrar"}
           </button>
           <span>
             Não tem uma conta?{" "}
@@ -90,9 +97,6 @@ export const LoginForm = () => {
             </span>
           </span>
         </div>
-
-        {error && <span className="form-error">{error}</span>}
-        {loading && <span className="form-loading">Carregando...</span>}
       </LoginFormWrapper>
     </LoginWrapper>
   );

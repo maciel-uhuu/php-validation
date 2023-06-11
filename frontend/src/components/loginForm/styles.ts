@@ -87,6 +87,10 @@ export const LoginFormWrapper = styled.form`
       &:hover {
         background-color: ${({ theme }) => theme.colors.primary};
       }
+
+      &:disabled {
+        cursor: not-allowed;
+      }
     }
 
     span {
