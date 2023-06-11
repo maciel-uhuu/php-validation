@@ -12,6 +12,7 @@ const RECAPTCHA_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
 export const LoginForm = () => {
   const { setUser, error, setError } = useRootContext();
   const [cookies, setCookie, removeCookie] = useCookies(["uhuu-token"]);
+  const [cookiesUser, setCookieUser, removeCookieUser] = useCookies(["uhuu-userId"]);
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -46,6 +47,7 @@ export const LoginForm = () => {
       const { data } = await api.post("/api/login", form);
 
       setCookie("uhuu-token", data.token);
+      setCookieUser("uhuu-userId", data.user.id);
       setUser(data.user as User);
 
       navigate("/home");

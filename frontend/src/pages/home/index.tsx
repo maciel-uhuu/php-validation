@@ -42,8 +42,6 @@ export const Home = () => {
     setPage(data.page);
   }, [data]);
 
-  console.log(clients);
-
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -65,17 +63,21 @@ export const Home = () => {
     }
 
     try {
-      const { data } = await api.get("/api/users/filter", {
+      const { data: filtered } = await api.get("/api/users/filter", {
         params: {
           key: filter.key,
           value: filter.value,
+          page,
+          limit: 100,
         },
         headers: {
           Authorization: `Bearer ${cookies["uhuu-token"]}`,
         },
       });
 
-      setClients(data.data);
+      setClients(filtered.data);
+      setCount(filtered.total);
+      setPage(filtered.page);
     } catch (error: any) {
       console.log(error);
       setError(error.response.data.error);
@@ -154,7 +156,7 @@ export const Home = () => {
         {error && <span style={{ color: "red" }}>{error}</span>}
 
         <DataGrid
-          rows={clients}
+          rows={clients || []}
           rowCount={count}
           columns={[
             { field: "id", headerName: "ID", width: 70 },
@@ -198,6 +200,7 @@ export const Home = () => {
           paginationModel={paginationModel}
           paginationMode="server"
           pageSizeOptions={[5, 10, 25]}
+          hideFooterPagination={filter.value !== "" ? true : false}
         />
       </HomeContent>
     </HomeWrapper>

@@ -32,6 +32,10 @@ export const RootContextProvider = ({ children }: RootContextProviderProps) => {
   const [user, setUser] = useState<User>({} as User);
   const [data, setData] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(["uhuu-token"]);
+  const [cookiesUser, setCookieUser, removeCookieUser] = useCookies([
+    "uhuu-userId",
+  ]);
+
   const [error, setError] = useState("");
 
   const getClients = async (page = 1, limit = 10) => {
@@ -51,6 +55,28 @@ export const RootContextProvider = ({ children }: RootContextProviderProps) => {
       console.log(error);
     }
   };
+
+  const getUser = async () => {
+    if (cookies["uhuu-token"]) {
+      try {
+        const { data } = await api.get(`api/users/${cookiesUser["uhuu-userId"]}`, {
+          headers: {
+            Authorization: `Bearer ${cookies["uhuu-token"]}`,
+          },
+        });
+  
+        setUser(data);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      window.location.href = "/";
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   useEffect(() => {
     if (error) {
