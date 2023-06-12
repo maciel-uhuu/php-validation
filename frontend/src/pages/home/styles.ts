@@ -25,6 +25,11 @@ export const HomeFilterWrapper = styled.section`
   justify-content: flex-start;
   gap: 15px;
 
+  div:last-child {
+    display: flex;
+    gap: 10px;
+  }
+
   input, select {
     font-size: clamp(1rem, 2vw, 1rem);
     
@@ -66,6 +71,10 @@ export const HomeFilterWrapper = styled.section`
 
   .clear-button {
     background-color: ${({ theme }) => theme.colors.tertiary};
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
   }
 `;
 

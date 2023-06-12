@@ -12,7 +12,9 @@ const RECAPTCHA_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
 export const LoginForm = () => {
   const { setUser, error, setError } = useRootContext();
   const [cookies, setCookie, removeCookie] = useCookies(["uhuu-token"]);
-  const [cookiesUser, setCookieUser, removeCookieUser] = useCookies(["uhuu-userId"]);
+  const [cookiesUser, setCookieUser, removeCookieUser] = useCookies([
+    "uhuu-userId",
+  ]);
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -50,7 +52,8 @@ export const LoginForm = () => {
       setCookieUser("uhuu-userId", data.user.id);
       setUser(data.user as User);
 
-      navigate("/home");
+      if (data.user.type === 1) navigate("/home");
+      else navigate("/client-zone");
     } catch (error: any) {
       console.log(error);
       setError(error.response.data.error);
@@ -90,12 +93,12 @@ export const LoginForm = () => {
           {error && <span style={{ color: "red" }}>{error}</span>}
         </div>
 
-        <ReCAPTCHA
-          sitekey={RECAPTCHA_KEY}
-          onChange={() => setCaptcha(true)}
-        />
-
         <div className="form-button-box">
+          <ReCAPTCHA
+            sitekey={RECAPTCHA_KEY}
+            onChange={() => setCaptcha(true)}
+          />
+
           <button type="submit" disabled={loading}>
             {loading ? "Carregando..." : "Entrar"}
           </button>

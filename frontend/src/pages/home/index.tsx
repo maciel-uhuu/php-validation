@@ -134,23 +134,26 @@ export const Home = () => {
               })}
             </select>
           </div>
-          <button type="button" onClick={handleFilter}>
-            Filtrar
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              getClients();
-              setFilter({
-                key: "name",
-                value: "",
-              });
-            }}
-            disabled={filter.value === ""}
-            className="clear-button"
-          >
-            Limpar
-          </button>
+
+          <div>
+            <button type="button" onClick={handleFilter}>
+              Filtrar
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                getClients();
+                setFilter({
+                  key: "name",
+                  value: "",
+                });
+              }}
+              disabled={filter.value === ""}
+              className="clear-button"
+            >
+              Limpar
+            </button>
+          </div>
         </HomeFilterWrapper>
 
         {error && <span style={{ color: "red" }}>{error}</span>}

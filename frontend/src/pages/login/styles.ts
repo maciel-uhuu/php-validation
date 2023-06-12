@@ -5,6 +5,10 @@ export const LoginAndRegisterWrapper = styled.div`
   grid-template-columns: 1fr 1fr;
   height: 100vh;
   place-items: center;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const LoginAndRegisterSection = styled.section`
@@ -34,6 +38,10 @@ export const LogoSection = styled.section`
   img {
     width: 100%;
     max-width: 400px;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
   }
 
 `;

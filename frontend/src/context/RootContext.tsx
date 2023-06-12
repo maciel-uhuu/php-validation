@@ -57,6 +57,8 @@ export const RootContextProvider = ({ children }: RootContextProviderProps) => {
   };
 
   const getUser = async () => {
+    const windowUrl = window.location.pathname;
+
     if (cookies["uhuu-token"]) {
       try {
         const { data } = await api.get(`api/users/${cookiesUser["uhuu-userId"]}`, {
@@ -69,7 +71,7 @@ export const RootContextProvider = ({ children }: RootContextProviderProps) => {
       } catch (error) {
         console.log(error);
       }
-    } else {
+    } else if (windowUrl !== "/") {
       window.location.href = "/";
     }
   };

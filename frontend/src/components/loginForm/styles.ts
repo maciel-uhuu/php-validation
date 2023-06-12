@@ -22,7 +22,7 @@ export const LoginFormWrapper = styled.form`
   gap: 20px;
 
   width: 100%;
-  max-width: 400px;
+  max-width: 700px;
   padding: 60px;
   margin-top: 20px;
 
