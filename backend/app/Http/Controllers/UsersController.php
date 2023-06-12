@@ -105,7 +105,7 @@ class UsersController extends Controller
             return response()->json($user, 201);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['error' => 'Erro ao criar usuário'], 500);
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
 

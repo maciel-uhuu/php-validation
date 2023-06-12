@@ -5,7 +5,7 @@ services:
     build:
       context: ./
     ports:
-      - "8000:8000"
+      - 8000:8000
     environment:
       - JWT_SECRET=GKDZlvIsWesjLiHANMTsVWFvc4IH4GULnqfrpV028mcMFF3xuNYq6zVlsbnfwVNd
       - DB_CONNECTION=mysql
@@ -14,23 +14,16 @@ services:
       - DB_DATABASE=uhuu
       - DB_USERNAME=root
       - DB_PASSWORD=123456
-    networks:
-      - laravel
     depends_on:
       - mysql
   mysql:
       container_name: mysql-uhuu
       image: 'mysql:8.0'
       environment:
-        MYSQL_ROOT_PASSWORD: "123456"
-        MYSQL_DATABASE: "uhuu"
+        - MYSQL_ROOT_PASSWORD=123456
+        - MYSQL_DATABASE=uhuu
       ports:
         - 3306:3306
-      networks:
-        - laravel
-networks:
-    laravel:
-        driver: bridge
 volumes:
     mysql8:
         driver: local
