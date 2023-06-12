@@ -6,9 +6,11 @@
         @yield('head')
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net" />
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
         <!-- Styles -->
         <script src="https://cdn.tailwindcss.com"></script>
+
     </head>
     <body class="w-screen h-screen flex items-center justify-center bg-gray-800">
         @yield('content')

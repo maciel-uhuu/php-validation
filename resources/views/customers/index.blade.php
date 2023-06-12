@@ -3,16 +3,32 @@
     <title>Listagem de clientes </title>
 @endsection
 @section('content')
+    <h1 class="text-xl font-bold text-white mb-4">Clientes</h1>
     <div class="flex items-center justify-between">
-        <h1 class="text-xl font-bold text-white">Clientes</h1>
-        <div class="actions flex items-center">
+        <form class="flex flex-1 m-0 p-0 mr-20" method="GET">
+            <x-forms.input
+                id="search"
+                label="" placeholder="Pesquise usando o nome ou e-mail"
+                height="h-12"
+                marginFieldset="mr-4"
+                widthFieldset="flex-1"
+                value={{$search}}
+            />
+            <x-button :margin="false" type="submit">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                Pesquisar
+            </x-button>
+        </form>
+        <div class="flex items-center">
             <a href="{{url('/customers/create')}}" class="mr-4">
-                <x-button :margin="false">
-                    Excluir cliente
+                <x-button :margin="false" mode="danger">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    Excluir clientes selecionados
                 </x-button>
             </a>
             <a href="{{url('/customers/create')}}">
                 <x-button :margin="false">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
                     Adicionar cliente
                 </x-button>
             </a>
@@ -50,6 +66,9 @@
                     <x-modal.modal-delete
                         :args="['customer' => $customer->id]"
                         id="{{ $customer->id }}" routeDelete="customers.destroy"
+                        title="Exclusão do cliente {{$customer->name}}"
+                        description="Cuidado! ao excluir o cliente {{$customer->name}} não será possível reverter a ação"
+                        buttonText="Excluir o cliente"
                     />
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">
@@ -68,7 +87,7 @@
                             <a href="/customers/{{ $customer->id }}/edit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                                 Editar
                             </a>
-                            <a onclick="handleClickModal('{!! $customer->id !!}')" class="font-medium text-red-600 hover:underline ml-4">
+                            <a onclick="handleClickModal('{!! $customer->id !!}')" class="font-medium text-red-600 hover:underline ml-4 cursor-pointer">
                                 Excluir
                             </a>
                         </td>
@@ -78,20 +97,22 @@
         </table>
     </div>
     @if ($customers->hasPages())
-        <div class="pagination">
-            @if (!$customers->onFirstPage())
-                <a href={{ $customers->previousPageUrl() }} class="btn">
-                    <span class="material-icons">navigate_before</span>
-                </a>
-            @endif
-            <small>
+        <div class="flex items-center justify-center mt-4">
+            <a href={{ $customers->previousPageUrl().'&search='.$search }} class="text-white">
+                <x-button :disabled="$customers->onFirstPage()" :margin="false">
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    Voltar
+                </x-button>
+            </a>
+            <small class="text-base text-white mx-4 font-bold">
                 {{ $customers->currentPage() }}
             </small>
-            @if ($customers->hasMorePages())
-                <a href={{ $customers->nextPageUrl() }} class="btn">
-                    <span class="material-icons margin-left">navigate_next</span>
-                </a>
-            @endif
+            <a href={{ $customers->nextPageUrl().'&search='.$search }} class="text-white">
+                <x-button :disabled="!$customers->hasMorePages()" :margin="false">
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    Próxima
+                </x-button>
+            </a>
         </div>
     @endif
 @endsection

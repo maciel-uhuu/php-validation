@@ -11,7 +11,8 @@ class ModalDelete extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public string $routeDelete, public string $id, public array $args = [])
+    public function __construct(public string $routeDelete, public string $id,
+        public array $args = [], public string $title = '', public string $description = "", public string $buttonText = '')
     {
         //
     }

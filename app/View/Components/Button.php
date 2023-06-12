@@ -11,7 +11,8 @@ class Button extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public string $type = 'button', public string $variant = 'solid', public bool $margin = true)
+    public function __construct(public string $type = 'button',
+        public string $variant = 'solid', public bool $margin = true, public bool $disabled = false, public string $mode = 'primary')
     {
         //
     }
@@ -23,4 +24,5 @@ class Button extends Component
     {
         return view('components.button');
     }
+
 }

@@ -11,7 +11,7 @@ class LinkButton extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public string $link)
+    public function __construct(public string $link, public bool $margin = true)
     {
         //
     }

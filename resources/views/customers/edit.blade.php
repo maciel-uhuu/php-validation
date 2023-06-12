@@ -6,6 +6,7 @@
     <div class="flex items-center">
         <a href="/customers">
             <x-button :margin="false">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
                 Voltar
             </x-button>
         </a>
