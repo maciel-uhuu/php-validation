@@ -20,12 +20,12 @@
             </x-button>
         </form>
         <div class="flex items-center">
-            <a href="{{url('/customers/create')}}" class="mr-4">
+            {{-- <a href="{{url('/customers/create')}}" class="mr-4">
                 <x-button :margin="false" mode="danger">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                     Excluir clientes selecionados
                 </x-button>
-            </a>
+            </a> --}}
             <a href="{{url('/customers/create')}}">
                 <x-button :margin="false">
                     <i class="fa fa-plus" aria-hidden="true"></i>

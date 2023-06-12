@@ -16,26 +16,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::prefix('admin')->group(function(){
+
+// Route::prefix('admin')->group(function(){
     Route::prefix('auth')->group(function(){
         Route::get('login', [AdminAuthController::class, 'login'])->name('login');
         Route::post('login', [AdminAuthController::class, 'submitLogin'])->name('admin.submit.login');
     });
-});
+// });
 
-Route::prefix('auth')->group(function(){
-    Route::get('/login', [AuthController::class, 'login']);
-    Route::get('/register', [AuthController::class, 'register']);
-    Route::post('/register', [CustomerController::class, 'store'])->name('register.customer');
-});
+// Route::prefix('auth')->group(function(){
+//     Route::get('/login', [AuthController::class, 'login']);
+//     Route::get('/register', [AuthController::class, 'register']);
+//     Route::post('/register', [CustomerController::class, 'store'])->name('register.customer');
+// });
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::resource('customers', CustomerController::class);
     Route::get('logout', [AdminAuthController::class, 'logout']);
+    Route::get('/', function () {
+        return redirect('customers');
+    });
 });
 
 
