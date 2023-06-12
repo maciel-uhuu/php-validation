@@ -1,0 +1,46 @@
+* {
+  font-family: "Montserrat", sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  outline: none;
+  resize: none;
+}
+
+body,
+p,
+h1,
+ul,
+li,
+blockquote,
+h1,
+h2,
+h3,
+h4 {
+  padding: 0;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  width: 100%;
+  display: block;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+button:disable {
+  cursor: not-allowed;
+}
