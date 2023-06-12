@@ -4,5 +4,7 @@
         <x-nav-link text="Clientes" />
         <x-nav-link text="Perfil" />
     </ul>
-    <x-button>Sair</x-button>
+    <a href={{url('logout')}} >
+        <x-button>Sair</x-button>
+    </a>
 </nav>
